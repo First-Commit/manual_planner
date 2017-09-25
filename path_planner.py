@@ -34,7 +34,6 @@ def main(gates_input_filename, path_input_filename="", path_output_filename=""):
   plt.show()
 
 def savePath(path_data, filename):
-  print(path_data)
   with open(filename, "w") as f:
     writer = csv.DictWriter(f, fieldnames=['x','y','z','yaw'])
     writer.writeheader()
@@ -70,7 +69,7 @@ def calcPath(gates_data):
     waypoint_after = float(row['waypoint_after'])
     sign_flip = 1
     y_135_fix = 0
-    if angle == -90 or angle == 90:
+    if angle == -90 or angle == -270:
       sign_flip = -1
     if angle == -135:
       y_135_fix = kGateWidth
@@ -124,12 +123,12 @@ def drawGates(ax1, gates_data):
       bottomLeftOfRect = (origin['x']-kGateThickness/2.0, origin['y']-kGateWidth/2.0+shift)
       if angle == -90:
         bottomLeftOfRect = (origin['x']-kGateWidth/2.0, origin['y']+kGateThickness/2.0)
-      if angle == 90:
+      if angle == -270:
         bottomLeftOfRect = (origin['x']+kGateWidth/2.0, origin['y']-kGateThickness/2.0)
       if angle == -135:
         # Hardcoded because geometry is hard
         bottomLeftOfRect = (origin['x']-kGateWidth*0.30, origin['y']+kGateWidth*0.40)
-      if angle == 180:
+      if angle == -178:
         bottomLeftOfRect = (origin['x']+kGateThickness/2.0, origin['y']+kGateWidth/2.0+shift)
       ax1.add_patch(
         patches.Rectangle(
