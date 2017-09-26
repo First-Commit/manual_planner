@@ -15,7 +15,7 @@ kGateWidth = 1.3 # meters
 kGateThickness = 0.2 # meters
 # assuming origin of gate data is at center of first gate, this param shifts the 
 # vehicle origin to a different location (eg, take off 3 meters in x from the first gate)
-kOriginShift = (7.0,0)
+kOriginShift = (7.1,0)
 
 def main(gates_input_filename, path_input_filename="", path_output_filename=""):
   """Loads gates file, and selectively computes path waypoints or loads a spline from disk
