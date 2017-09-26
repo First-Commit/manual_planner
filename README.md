@@ -9,12 +9,13 @@ Calculates x,y,z and yaw commands from a list of gate dimensions.
 # Usage
 
 ```
-usage: path_planner.py [--gatesin /path/to/gates.csv] [--pathout /path/to/path_out.csv] [--pathin /path/to/spline.csv]
+usage: path_planner.py [--gatesin /path/to/gates.csv] [--pathout /path/to/path_out.csv] 
+                       [--pathin /path/to/spline.csv]
 
 optional arguments:
   --gatesin gates.csv    Gate definitions input file
-  --pathin spline.csv    Spline input file
   --pathout path.csv     Path output file
+  --pathin spline.csv    Spline input file
 ``` 
 
 If --pathout is specified, a set of waypoints will be computed based on the gates input file. If matplotlib is available, a figure will be shown illustrating the resulting gate and path waypoint data.
