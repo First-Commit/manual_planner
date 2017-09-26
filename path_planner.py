@@ -15,7 +15,7 @@ import argparse
 # kPathOutFile = 'path_out.csv'
 kGateWidth = 1.3 # meters
 kGateThickness = 0.2 # meters
-kOriginShift = (7.416,0)
+kOriginShift = (7.3,0)
 
 def main(gates_input_filename, path_input_filename="", path_output_filename=""):
   if plotter:
