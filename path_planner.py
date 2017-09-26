@@ -2,8 +2,12 @@
 
 import csv
 import math
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
+plotter = False
+try:
+  import matplotlib.pyplot as plt
+  import matplotlib.patches as patches
+except:
+  plotter = False
 import argparse
 
 # kGatesFile = 'gates.csv'
@@ -14,24 +18,28 @@ kGateThickness = 0.2 # meters
 kOriginShift = (3.0,0)
 
 def main(gates_input_filename, path_input_filename="", path_output_filename=""):
-  fig1 = plt.figure()
-  ax1 = fig1.add_subplot(111, aspect='equal')
+  if plotter:
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111, aspect='equal')
   
   gates_data = loadGates(gates_input_filename)
-  drawGates(ax1, gates_data)
-  if path_input_filename:
-    path_data_in = loadPath(path_input_filename)
-    drawPath(ax1, path_data_in)
+  if plotter:
+    drawGates(ax1, gates_data)
+    if path_input_filename:
+      path_data_in = loadPath(path_input_filename)
+      drawPath(ax1, path_data_in)
   if path_output_filename:
     path_data = calcPath(gates_data)
-    drawPath(ax1, path_data)
+    if plotter:
+      drawPath(ax1, path_data)
     savePath(path_data, path_output_filename)
   
-  plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
-  plt.axis('equal')
-  plt.axis('off')
+  if plotter:
+    plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
+    plt.axis('equal')
+    plt.axis('off')
 
-  plt.show()
+    plt.show()
 
 def savePath(path_data, filename):
   with open(filename, "w") as f:
