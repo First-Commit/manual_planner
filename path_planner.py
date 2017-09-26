@@ -2,6 +2,7 @@
 
 import csv
 import math
+# check for visualization capabilities
 plotter = True
 try:
   import matplotlib.pyplot as plt
@@ -10,14 +11,19 @@ except:
   plotter = False
 import argparse
 
-# kGatesFile = 'gates.csv'
-# kPathInFile = 'path_in.csv'
-# kPathOutFile = 'path_out.csv'
 kGateWidth = 1.3 # meters
 kGateThickness = 0.2 # meters
-kOriginShift = (6.147,0)
+# assuming origin of gate data is at center of first gate, this param shifts the 
+# vehicle origin to a different location (eg, take off 3 meters in x from the first gate)
+kOriginShift = (6.147,0) # meters
 
 def main(gates_input_filename, path_input_filename="", path_output_filename=""):
+  """Loads gates file, and selectively computes path waypoints or loads a spline from disk
+  Args:
+      gates_input_filename: Input csv file with gate information
+      path_input_filename: Input csv file with spline information
+      path_output_filename: Output csv file for path waypoints computed from gate data
+  """
   if plotter:
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111, aspect='equal')
@@ -42,6 +48,11 @@ def main(gates_input_filename, path_input_filename="", path_output_filename=""):
     plt.show()
 
 def savePath(path_data, filename):
+  """Saves an instance of the path_data struct to disk
+  Args:
+      path_data (list of dicts): The list of x,y,z,yaw waypoints
+      filename (string): The system path and filename where to save the path csv
+  """
   with open(filename, "w") as f:
     writer = csv.DictWriter(f, fieldnames=['x','y','z','yaw'])
     writer.writeheader()
@@ -51,6 +62,12 @@ def savePath(path_data, filename):
   print("Wrote path to csv: {}".format(filename))
 
 def drawOrientation(ax1, center, angle):
+  """Helper function that draws an arrow from a x,y point at a specified angle
+  Args:
+      ax1: The subplot figure handle
+      center: The x,y origin of the root of the arrow (meters)
+      angle: The angle of the arrow from the x-axis of the root (radians)
+  """
   delta_x = math.cos(angle)*0.5
   delta_y = math.sin(angle)*0.5
   ax1.add_patch(
@@ -65,6 +82,11 @@ def drawOrientation(ax1, center, angle):
   )
 
 def calcPath(gates_data):
+  """Calculate a set of path waypoints based on provided gate data
+  Args:
+      gates_data: List of dicts containing gate origin data and specifiers to assist
+                  with how to choose path waypoints in and around the gates
+  """
   waypoints_out = []
   for i,row in enumerate(gates_data):
     origin = {'x': float(row['x'])+kOriginShift[0], 'y': float(row['y'])+kOriginShift[1]}
@@ -91,6 +113,11 @@ def calcPath(gates_data):
   return waypoints_out
 
 def drawPath(ax1, path_data):
+  """Draws the path waypoints and connects them using arrows
+  Args:
+      ax1: The subplot figure handle
+      path_data: The list of x,y,z,yaw waypoints
+  """
   for i,wp in enumerate(path_data):
     # ax1.add_patch(
     #   patches.Circle(
@@ -113,16 +140,30 @@ def drawPath(ax1, path_data):
     drawOrientation(ax1, (float(wp['x']),float(wp['y'])), float(wp['yaw']))
 
 def loadPath(path_file):
+  """Loads a list of x,y,z,yaw path waypoints from disk (can be a discretized spline)
+  Args:
+      path_file: System filepath of the csv file
+  """
   print("Opening path file: {}".format(path_file))
   reader = csv.DictReader(open(path_file), delimiter=',', skipinitialspace=True)
   return list(reader)
 
 def loadGates(gates_file):
+  """Loads a list of x,y,z,yaw waypoints from disk
+  Args:
+      gates_file: System filepath of the csv file
+  """
   print("Opening gates file: {}".format(gates_file))
   reader = csv.DictReader(open(gates_file), delimiter=',', skipinitialspace=True)
   return list(reader)
 
 def drawGates(ax1, gates_data):
+  """Draws representations of the gate locations
+  Args:
+      ax1: The subplot figure handle
+      gates_data: List of dicts containing gate origin data and specifiers to assist
+                  with how to choose path waypoints in and around the gates
+  """
     for i,row in enumerate(gates_data):
       origin = {'x': float(row['x'])+kOriginShift[0], 'y': float(row['y'])+kOriginShift[1]}
       angle = float(row['rotation'])
