@@ -36,6 +36,7 @@ def main(gates_input_filename, path_input_filename="", path_output_filename=""):
       drawPath(ax1, path_data_in)
   if path_output_filename:
     path_data = calcPath(gates_data)
+    printPath(path_data)
     if plotter:
       drawPath(ax1, path_data)
     savePath(path_data, path_output_filename)
@@ -46,6 +47,10 @@ def main(gates_input_filename, path_input_filename="", path_output_filename=""):
     plt.axis('off')
 
     plt.show()
+
+def printPath(path_data):
+  for i, wp in enumerate(path_data):
+    print("{:02d} | x: {:2.3f} y: {:2.3f} z: {:2.3f} yaw: {:2.3f}".format(i, wp['x'], wp['y'], wp['z'], wp['yaw']))
 
 def savePath(path_data, filename):
   """Saves an instance of the path_data struct to disk
@@ -128,7 +133,6 @@ def drawPath(ax1, path_data):
     # )
     if i < len(path_data)-1:
       delta = {'x': float(path_data[i+1]['x'])-float(path_data[i]['x']), 'y': float(path_data[i+1]['y'])-float(path_data[i]['y'])}
-      print("x1 {} x2 {} | y1 {} y2 {}".format(float(path_data[i+1]['x']), float(path_data[i]['x']), float(path_data[i+1]['y']), float(path_data[i]['y'])))
       ax1.add_patch(
         patches.Arrow(
           float(wp['x']),
@@ -164,51 +168,51 @@ def drawGates(ax1, gates_data):
       gates_data: List of dicts containing gate origin data and specifiers to assist
                   with how to choose path waypoints in and around the gates
   """
-    for i,row in enumerate(gates_data):
-      origin = {'x': float(row['x'])+kOriginShift[0], 'y': float(row['y'])+kOriginShift[1]}
-      angle = float(row['rotation'])
-      shift = float(row['offset_y'])
-      # angle = 0  
-      bottomLeftOfRect = (origin['x']-kGateThickness/2.0, origin['y']-kGateWidth/2.0+shift)
-      if angle == -90:
-        bottomLeftOfRect = (origin['x']-kGateWidth/2.0, origin['y']+kGateThickness/2.0)
-      if angle == -270:
-        bottomLeftOfRect = (origin['x']+kGateWidth/2.0, origin['y']-kGateThickness/2.0)
-      if angle == -135:
-        # Hardcoded because geometry is hard
-        bottomLeftOfRect = (origin['x']-kGateWidth*0.30, origin['y']+kGateWidth*0.40)
-      if angle == -178:
-        bottomLeftOfRect = (origin['x']+kGateThickness/2.0, origin['y']+kGateWidth/2.0+shift)
-      ax1.add_patch(
-        patches.Rectangle(
-          bottomLeftOfRect,         # (x,y)
-          0.2,                      # width
-          kGateWidth,               # length
-          angle=angle
-        )
-      )
-      ax1.add_patch(
-        patches.Circle(
-          (origin['x'], origin['y']),   # (x,y)
-          0.2,          # radius
-          facecolor="#ff0000"
-        )
-      )
-      text_origin = {'x': origin['x'], 'y': origin['y']-2.0}
-      ax1.text(text_origin['x'], text_origin['y'], str(i+1))
-
-    # add coordinate system
+  for i,row in enumerate(gates_data):
+    origin = {'x': float(row['x'])+kOriginShift[0], 'y': float(row['y'])+kOriginShift[1]}
+    angle = float(row['rotation'])
+    shift = float(row['offset_y'])
+    # angle = 0  
+    bottomLeftOfRect = (origin['x']-kGateThickness/2.0, origin['y']-kGateWidth/2.0+shift)
+    if angle == -90:
+      bottomLeftOfRect = (origin['x']-kGateWidth/2.0, origin['y']+kGateThickness/2.0)
+    if angle == -270:
+      bottomLeftOfRect = (origin['x']+kGateWidth/2.0, origin['y']-kGateThickness/2.0)
+    if angle == -135:
+      # Hardcoded because geometry is hard
+      bottomLeftOfRect = (origin['x']-kGateWidth*0.30, origin['y']+kGateWidth*0.40)
+    if angle == -178:
+      bottomLeftOfRect = (origin['x']+kGateThickness/2.0, origin['y']+kGateWidth/2.0+shift)
     ax1.add_patch(
-      patches.Arrow(
-        0.0,            # x
-        0.0,            # y
-        1.0,            # dx
-        0.0,            # dy
-        width=1.0,
-        facecolor="#00ff00"
+      patches.Rectangle(
+        bottomLeftOfRect,         # (x,y)
+        0.2,                      # width
+        kGateWidth,               # length
+        angle=angle
       )
     )
-    ax1.text(1.1, -0.2, 'x')
+    ax1.add_patch(
+      patches.Circle(
+        (origin['x'], origin['y']),   # (x,y)
+        0.2,          # radius
+        facecolor="#ff0000"
+      )
+    )
+    text_origin = {'x': origin['x'], 'y': origin['y']-2.0}
+    ax1.text(text_origin['x'], text_origin['y'], str(i+1))
+
+  # add coordinate system
+  ax1.add_patch(
+    patches.Arrow(
+      0.0,            # x
+      0.0,            # y
+      1.0,            # dx
+      0.0,            # dy
+      width=1.0,
+      facecolor="#00ff00"
+    )
+  )
+  ax1.text(1.1, -0.2, 'x')
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
