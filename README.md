@@ -1,4 +1,4 @@
-# manual_planner
+# Manual Planner For Gates
 
 Calculates x,y,z and yaw commands from a list of gate dimensions.
 
