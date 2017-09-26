@@ -27,16 +27,16 @@ The gates file should be a csv with the following header, and appropriately foll
 
 ```
 column params:
-  - num 				Gate number
-  - x 					X coordinate of the center of the gate (m)
-  - y 					Y coordinate of the center of the gate (m)
-  - z 				    Z coordinate of the center of the gate (m)
-  - rotation 			Rotation of the entry direction of the gate (degrees)
-  - offset_x 			Offset in X of the entry from the center of the gate (m)
-  - offset_y 			Offset in Y of the entry from the center of the gate (m)
-  - offset_z 			Offset in Z of the entry from the center of the gate (m)
-  - waypoint_before 	Distance to insert a waypoint before a gate (m) [0 = no waypoint]
-  - waypoint_after 		Distance to insert a waypoint after a gate (m) [0 = no waypoint]
+  - num                 Gate number
+  - x                   X coordinate of the center of the gate (m)
+  - y                   Y coordinate of the center of the gate (m)
+  - z                   Z coordinate of the center of the gate (m)
+  - rotation            Rotation of the entry direction of the gate (degrees)
+  - offset_x            Offset in X of the entry from the center of the gate (m)
+  - offset_y            Offset in Y of the entry from the center of the gate (m)
+  - offset_z            Offset in Z of the entry from the center of the gate (m)
+  - waypoint_before     Distance to insert a waypoint before a gate (m) [0 = no waypoint]
+  - waypoint_after      Distance to insert a waypoint after a gate (m) [0 = no waypoint]
 ```
 
 
